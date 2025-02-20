@@ -1,0 +1,24 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY frontend/package.json ./
+RUN npm install
+
+# Copy the rest of the frontend code
+COPY frontend/ ./
+
+# Create necessary directories if they don't exist
+RUN mkdir -p src/components
+
+# Copy component files explicitly
+COPY frontend/src/components/Dashboard.jsx src/components/
+COPY frontend/src/components/SensorChart.jsx src/components/
+COPY frontend/src/App.jsx src/
+COPY frontend/index.html ./
+
+EXPOSE 5173
+ENV HOST=0.0.0.0
+
+CMD ["npm", "run", "dev", "--", "--host"]
